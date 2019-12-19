@@ -234,6 +234,7 @@ class FullTokenizer(object):
   def __init__(self, vocab_file, do_lower_case=True, spm_model_file=None):
     self.vocab = None
     self.sp_model = None
+    self.do_lower_case = do_lower_case
     if spm_model_file:
       self.sp_model = spm.SentencePieceProcessor()
       tf.logging.info("loading sentence piece model")
@@ -250,6 +251,8 @@ class FullTokenizer(object):
 
   def tokenize(self, text):
     if self.sp_model:
+      if self.do_lower_case:
+        text = text.lower()
       split_tokens = encode_pieces(self.sp_model, text, return_unicode=False)
     else:
       split_tokens = []
